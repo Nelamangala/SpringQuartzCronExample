@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:context="http://www.springframework.org/schema/context"
+    xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans-4.0.xsd
+                            http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context-4.0.xsd">
+ 
+    <bean name="JobADetail"    class="org.springframework.scheduling.quartz.JobDetailFactoryBean">
+        <property name="jobClass" value="com.ganesh.demo.quartzScheduling.jobs.JobA" />
+        <property name="durability" value="true" />
+    </bean>
+    <bean name="JobBDetail"    class="org.springframework.scheduling.quartz.JobDetailFactoryBean">
+        <property name="jobClass" value="com.ganesh.demo.quartzScheduling.jobs.JobB" />
+        <property name="durability" value="true" />
+    </bean>
+     <bean name="JobCDetail"    class="org.springframework.scheduling.quartz.JobDetailFactoryBean">
+        <property name="jobClass" value="com.ganesh.demo.quartzScheduling.jobs.JobC" />
+        <property name="durability" value="true" />
+    </bean>
+ 
+    <!-- Run the job every 5 seconds -->
+    <bean id="jobATrigger"  class="org.springframework.scheduling.quartz.CronTriggerFactoryBean">
+        <property name="jobDetail" ref="JobADetail" />
+        <property name="cronExpression" value="0/20 * * * * ?" />
+    </bean>
+    <bean id="jobBTrigger"  class="org.springframework.scheduling.quartz.CronTriggerFactoryBean">
+        <property name="jobDetail" ref="JobBDetail" />
+        <property name="cronExpression" value="0/20 * * * * ?" />
+    </bean>
+    <bean id="jobCTrigger"  class="org.springframework.scheduling.quartz.CronTriggerFactoryBean">
+        <property name="jobDetail" ref="JobCDetail" />
+        <property name="cronExpression" value="0 0/3 * * * ?" />
+    </bean>
+ 
+ 
+    <!-- Scheduler factory bean to glue together jobDetails and triggers to Configure Quartz Scheduler -->
+    <bean  class="org.springframework.scheduling.quartz.SchedulerFactoryBean"> 
+        <property name="triggers">
+            <list>
+                <ref bean="jobATrigger" />
+                <ref bean="jobBTrigger" />
+                <ref bean="jobCTrigger" />
+            </list>
+        </property>
+    </bean>
+ 
+</beans>
